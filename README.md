@@ -1,3 +1,3 @@
 # pde
 
-Assignments codes for Partial Differential Equations (2020), in Applied Mathematics course at Getulio Vargas Foundation.
+Assignment codes for Partial Differential Equations (2020), in Applied Mathematics course at Getulio Vargas Foundation.
