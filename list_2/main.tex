@@ -4,7 +4,8 @@
 \usepackage[portuguese]{babel}
 
 \title{Lista 2 \\
-\large Equações Diferenciais Parciais}
+\large Equações Diferenciais Parciais \\
+Difusão de calor em um \textit{grid}}
 \author{Lucas Emanuel Resck Domingues}
 \date{Setembro de 2020}
 
@@ -13,6 +14,14 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{listings}
+
+%Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    allcolors=,  % Nothing change colors
+    urlcolor=blue  % URL changes color
+}
 
 \begin{document}
 
@@ -40,24 +49,24 @@
         $$u_t = c[(\Delta x)^2\widetilde{u}_{xx} + (\Delta y)^2\widetilde{u}_{yy}]$$
         Assumindo que o limite exista, podemos tomar $\Delta x = \Delta y$ e tomar o limite:
         \begin{align*}
-            u_t &= \widetilde{c}(u_{xx} + {u_yy}) \\
+            u_t &= \widetilde{c}(u_{xx} + {u_{yy}}) \\
             &= \widetilde{c} \Delta u
         \end{align*}
 
     \section*{Computacional}
 
-        O código foi escrito em \textit{Python} e utilizou as bibliotecas \textit{Numpy}, \textit{Matplotlib} e \textit{Seaborn}. Pode ser conferido no Apêndice \ref{appendix:a}.
+        O código foi escrito em \textit{Python} e utilizou as bibliotecas \textit{Numpy}, \textit{Matplotlib} e \textit{Seaborn}. Ele pode ser conferido no Apêndice \ref{appendix:a}.
 
         As simulações constam de um \textit{grid} 32 por 32 com calor constante nos bordos do sistema.
-        A dispersão do calor é calculada utilizando a equação de difusão do calor em grafos.
+        A dispersão do calor é calculada utilizando a equação de difusão do calor em \textit{grid}.
 
         \begin{itemize}
             \item[(a)] Para a primeira difusão, com temperatura 10 constante nos bordos do \textit{grid},
-                para $c=0,1$ e 1024 iterações, visualizamos algumas das etapas da dispersão na Figura \ref{fig:graph_1}.
+                para $c=0.1$ e 1024 iterações, visualizamos algumas das etapas da difusão na Figura \ref{fig:graph_1}.
                 
                 \begin{figure}[!h]
                     \includegraphics[width=\textwidth]{graph_1.png}
-                    \caption{Gráficos de dispersão do calor em um \textit{grid} 32 por 32, com temperatura constante nos bordos.}
+                    \caption{Gráficos de difusão do calor em um \textit{grid} 32 por 32, com temperatura constante 10 nos bordos.}
                     \label{fig:graph_1}
                 \end{figure}
 
@@ -71,7 +80,7 @@
                 
                 \begin{figure}[!h]
                     \includegraphics[width=\textwidth]{graph_2.png}
-                    \caption{Gráficos de dispersão do calor em um \textit{grid} 32 por 32, com temperaturas constantes nos bordos.}
+                    \caption{Gráficos de difusão do calor em um \textit{grid} 32 por 32, com temperaturas constantes nos bordos.}
                     \label{fig:graph_2}
                 \end{figure}
 
@@ -89,6 +98,8 @@
     \section{Código para a difusão de calor em \textit{grid}}
         \label{appendix:a}
 
+        O código também pode ser conferido \href{https://github.com/lucasresck/pde/blob/master/list_2/list_2.ipynb}{neste \textit{notebook} no \textit{GitHub}}.
+
         \begin{lstlisting}[language=Python]
 def make_grid(n, t_min, t_max_v, t_max_h):
     """Make the graph."""
@@ -102,30 +113,57 @@ def make_grid(n, t_min, t_max_v, t_max_h):
 
 def plot_grid(grid, ax, vmin=0, vmax=10):
     """Plot the temperatures of the grid."""
-    sns.heatmap(grid, vmin=vmin, vmax=vmax, ax=ax, cbar=False)
+    sns.heatmap(grid, vmin=vmin, vmax=vmax,
+                ax=ax, cbar=False)
     ax.set_xticks(ticks=[])
     ax.set_yticks(ticks=[])
 
 def one_step(grid, c):
-    """Calculate next step of the temperatures of the grid using graph diffusion equation."""
+    """Calculate next step of the temperatures
+    of the grid using graph diffusion equation."""
     grid_old = grid.copy()
     n = grid.shape[0]
     for i in range(1, n-1):
         for j in range(1, n-1):
-            grid[i, j] += c*(grid_old[i+1, j] + grid_old[i-1, j]
-                                + grid_old[i, j+1] + grid_old[i, j-1]
-                                - 4*grid[i, j])
+            grid[i, j] += c*(grid_old[i+1, j]
+                             + grid_old[i-1, j]
+                             + grid_old[i, j+1]
+                             + grid_old[i, j-1]
+                             - 4*grid[i, j])
     return grid
 
-def whole_process(c=0.1, n=32, t_min=0, t_max_v=10, t_max_h=10, T=1024):
-    grid = make_grid(n=n, t_min=t_min, t_max_v=t_max_v, t_max_h=t_max_h)
+def whole_process(
+    c=0.1, n=32, t_min=0,
+    t_max_v=10, t_max_h=10, T=1024
+):
+    
+    grid = make_grid(
+        n=n, t_min=t_min, t_max_v=t_max_v,
+        t_max_h=t_max_h
+    )
+    
     fig, axes = plt.subplots(2, 4, figsize=(15, 6))
-    plot_grid(grid, axes.reshape(-1)[0], vmin=t_min, vmax=max([t_max_h, t_max_v]))
+    
+    plot_grid(
+        grid, axes.reshape(-1)[0], vmin=t_min,
+        vmax=max([t_max_h, t_max_v])
+    )
+    
     for i in range(1, T):
         grid = one_step(grid, c)
         if i % (T/8) == 0:
-            plot_grid(grid, axes.reshape(-1)[int(i/(T/8))], vmin=t_min, vmax=max([t_max_h, t_max_v]))
-    fig.colorbar(axes[0, 0].collections[0], ax=axes.ravel().tolist())
+            plot_grid(
+                grid,
+                axes.reshape(-1)[int(i/(T/8))],
+                vmin=t_min,
+                vmax=max([t_max_h, t_max_v])
+            )
+            
+    fig.colorbar(
+        axes[0, 0].collections[0],
+        ax=axes.ravel().tolist()
+    )
+    
     plt.show()
     return grid
         \end{lstlisting}
