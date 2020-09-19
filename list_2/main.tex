@@ -78,23 +78,25 @@ Difusão de calor em um \textit{grid}}
                 para dentro do \textit{grid}.)
 
             \item[(b)] Para a segunda simulação, os bordos horizontais têm temperatura constante de 10,
-                enquanto os verticais, 20. Para $c=0.1$, foram necessárias 2118 iterações. Algumas etapas da simulação
+                enquanto os verticais, 20. Para $c=0.1$, foram necessárias 2118 iterações até a convergência. Algumas etapas da simulação
                 podem ser conferidas na Figura \ref{fig:graph_2}.
                 
                 \begin{figure}[!h]
                     \includegraphics[width=\textwidth]{graph_2.png}
-                    \caption{Gráficos de difusão do calor em um \textit{grid} 32 por 32, com temperaturas constantes nos bordos.}
+                    \caption{Gráficos de difusão do calor em um \textit{grid} 32 por 32, com temperaturas constantes, porém diferentes, nos bordos.}
                     \label{fig:graph_2}
                 \end{figure}
 
                 Observamos que o sistema converge para um sistema aparentemente simétrico, com um efeito gradiente ao se mover
-                de um bordo horizontal para um vertical. Compreensível, afinal possuem temperaturas constantes porém diferentes.
+                de um bordo horizontal para um vertical. Compreensível, afinal possuem bordos com temperaturas constantes porém diferentes.
 
                 A temperatura de equilíbro depende da posição do vértice no gráfico, mais especificamente das distâncias em relação aos bordos.
                 Por exemplo, observamos que os vértices centrais possuem temperatura próxima a 15, o que é intuitivo dado que é a média de 10 e 20
                 e o sistema apresenta simetria.
 
         \end{itemize}
+
+    \newpage
 
     \appendix
 
