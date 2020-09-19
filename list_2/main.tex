@@ -60,9 +60,12 @@ Difusão de calor em um \textit{grid}}
         As simulações constam de um \textit{grid} 32 por 32 com calor constante nos bordos do sistema.
         A dispersão do calor é calculada utilizando a equação de difusão do calor em \textit{grid}.
 
+        Um \textit{grid} é representado por um array 32 por 32. A atualização do \textit{grid} ocorre até que 
+        duas iterações consecutivas estejam próximas por uma tolerância de $10^{-2}$, na norma de Frobenius.
+
         \begin{itemize}
-            \item[(a)] Para a primeira difusão, com temperatura 10 constante nos bordos do \textit{grid},
-                para $c=0.1$ e 1024 iterações, visualizamos algumas das etapas da difusão na Figura \ref{fig:graph_1}.
+            \item[(a)] Para a primeira difusão, com temperatura 10 constante nos bordos do \textit{grid}
+                e $c=0.1$, foram necessárias 1921 iterações para a convergência com tolerância $10^{-2}$. Visualizamos algumas das etapas da difusão na Figura \ref{fig:graph_1}.
                 
                 \begin{figure}[!h]
                     \includegraphics[width=\textwidth]{graph_1.png}
@@ -75,7 +78,7 @@ Difusão de calor em um \textit{grid}}
                 para dentro do \textit{grid}.)
 
             \item[(b)] Para a segunda simulação, os bordos horizontais têm temperatura constante de 10,
-                enquanto os verticais, 20. Foram utilizados $c=0.1$ e 2048 iterações. Algumas etapas da simulação
+                enquanto os verticais, 20. Para $c=0.1$, foram necessárias 2118 iterações. Algumas etapas da simulação
                 podem ser conferidas na Figura \ref{fig:graph_2}.
                 
                 \begin{figure}[!h]
@@ -89,7 +92,7 @@ Difusão de calor em um \textit{grid}}
 
                 A temperatura de equilíbro depende da posição do vértice no gráfico, mais especificamente das distâncias em relação aos bordos.
                 Por exemplo, observamos que os vértices centrais possuem temperatura próxima a 15, o que é intuitivo dado que é a média de 10 e 20
-                e o sistema é todo simétrico.
+                e o sistema apresenta simetria.
 
         \end{itemize}
 
@@ -121,6 +124,7 @@ def plot_grid(grid, ax, vmin=0, vmax=10):
 def one_step(grid, c):
     """Calculate next step of the temperatures
     of the grid using graph diffusion equation."""
+    grid = grid.copy()
     grid_old = grid.copy()
     n = grid.shape[0]
     for i in range(1, n-1):
@@ -134,7 +138,7 @@ def one_step(grid, c):
 
 def whole_process(
     c=0.1, n=32, t_min=0,
-    t_max_v=10, t_max_h=10, T=1024
+    t_max_v=10, t_max_h=10, tol=10**(-2)
 ):
     
     grid = make_grid(
@@ -142,22 +146,24 @@ def whole_process(
         t_max_h=t_max_h
     )
     
-    fig, axes = plt.subplots(2, 4, figsize=(15, 6))
-    
-    plot_grid(
-        grid, axes.reshape(-1)[0], vmin=t_min,
-        vmax=max([t_max_h, t_max_v])
-    )
-    
-    for i in range(1, T):
+    grids = [grid]
+    diff = 1
+    while diff > tol:
         grid = one_step(grid, c)
-        if i % (T/8) == 0:
-            plot_grid(
-                grid,
-                axes.reshape(-1)[int(i/(T/8))],
-                vmin=t_min,
-                vmax=max([t_max_h, t_max_v])
-            )
+        grids.append(grid)
+        diff = np.linalg.norm(grids[-1] - grids[-2], ord='fro')
+    
+    fig, axes = plt.subplots(2, 4, figsize=(15, 6))
+
+    indices = list(np.linspace(0, len(grids)-1, num=8,
+                                endpoint=True, dtype=np.int))
+    for j, i in enumerate(indices):
+        plot_grid(
+            grids[i],
+            axes.reshape(-1)[j],
+            vmin=t_min,
+            vmax=max([t_max_h, t_max_v])
+        )
             
     fig.colorbar(
         axes[0, 0].collections[0],
@@ -165,7 +171,9 @@ def whole_process(
     )
     
     plt.show()
-    return grid
+    
+    print('{} steps with tolerance {}.'.format(len(grids), tol))
+    return grids
         \end{lstlisting}
 
 \end{document}
