@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+
+\title{Lista 4 \\
+\large Equações Diferenciais Parciais}
+\author{Lucas Emanuel Resck Domingues}
+\date{Outubro de 2020}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+
+%Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    allcolors=,  % Nothing change colors
+    urlcolor=blue  % URL changes color
+}
+
+\begin{document}
+
+    \maketitle
+    
+    \section*{Exercícios teóricos}
+
+        \begin{enumerate}
+            \item            
+                \begin{enumerate}
+                    \item Essa função é especial: ela é seno.
+                        Sendo assim, podemos escolher os coeficientes
+                        $a_n$ e $b_n$ tais que encontremos o seno de $5x$.
+                        Da expressão da série de Fourier, basta que escolhamos
+                        todos os coeficientes iguais a zero, com exceção de $b_5 = 1$.
+                        Então:
+                        
+                        \begin{align*}
+                            a(x) &= \dfrac{a_0}{2} + \sum_{m=1}^{\infty} \left(a_m \cos \left(\dfrac{m \pi x}{L}\right) + b_m \sin \left(\dfrac{m \pi x}{L}\right)\right) \\
+                            &= \sin \left(\dfrac{5 \pi x}{L}\right) \\
+                            &= \sin(5x)
+                        \end{align*}
+
+                    \item Calculemos os coeficientes:
+                    
+                        \begin{align*}
+                            a_0 &= \dfrac{1}{\pi} \int_{-\pi}^{\pi} \sin(5x + \alpha) dx \\
+                            &= 0
+                        \end{align*}
+
+                        Se $n \ne 0$:
+                        
+                        \begin{align*}
+                            a_n &= \dfrac{1}{\pi} \int_{-\pi}^{\pi} \sin(5x + \alpha) \cos(nx) dx \\
+                            &= \begin{cases}
+                                -\dfrac{2n\sin(\alpha)\sin(\pi n)}{\pi(n^2-25)}, & n \ne 5\\
+                                \sin(\alpha), & n = 5
+                            \end{cases} \\
+                            &= \begin{cases}
+                                0, & n \ne 5\\
+                                \sin(\alpha), & n = 5
+                            \end{cases}
+                        \end{align*}
+
+                        Agora para $b_n$:
+
+                        \begin{align*}
+                            b_n &= \dfrac{1}{\pi} \int_{-\pi}^{\pi} \sin(5x + \alpha) \sin(nx) dx \\
+                            &= \begin{cases}
+                                -\dfrac{10\cos(\alpha)\sin(\pi n)}{\pi(n^2-25)}, & n \ne 5\\
+                                \cos(\alpha), & n = 5
+                            \end{cases} \\
+                            &= \begin{cases}
+                                0, & n \ne 5\\
+                                \cos(\alpha), & n = 5
+                            \end{cases}
+                        \end{align*}
+
+                        Então:
+                        
+                        \begin{align*}
+                            b(x) &= \dfrac{a_0}{2} + \sum_{m=1}^{\infty} \left(a_m \cos \left(\dfrac{m \pi x}{L}\right) + b_m \sin \left(\dfrac{m \pi x}{L}\right)\right) \\
+                            &= a_5 \cos(5x) + b_5 \sin(5x) \\
+                            &= \sin(\alpha) \cos(5x) + \cos(\alpha) \sin(5x)
+                        \end{align*}
+
+                    \item
+                        \begin{align*}
+                            a_0 &= \dfrac{1}{\pi} \int_{-\pi}^{\pi}c(x)dx \\
+                            &= \dfrac{1}{\pi} \int_{0}^{\pi} 1 dx \\
+                            &= 1
+                        \end{align*}
+
+                        \begin{align*}
+                            a_n &= \dfrac{1}{\pi} \int_{0}^{\pi} \cos(nx) dx \\
+                            &= 0
+                        \end{align*}
+
+                        \begin{align*}
+                            b_n &= \dfrac{1}{\pi} \int_{0}^{\pi} \sin(nx) dx \\
+                            &= \dfrac{-\cos(n\pi)+1}{n\pi} \\
+                            &= \begin{cases}
+                                0, &n \text{ par} \\
+                                \dfrac{2}{n\pi}, &n \text{ ímpar}
+                            \end{cases}
+                        \end{align*}
+
+                        \begin{align*}
+                            c(x) &= \dfrac{1}{2} + \sum_{n=1}^\infty \dfrac{2\sin(nx)}{n\pi} \\
+                            &= \dfrac{1}{2} + \dfrac{2}{\pi}\sum_{m=1}^\infty \dfrac{\sin((2m+1)x)}{(2m+1)} \\
+                        \end{align*}
+
+                    \item
+                        \begin{align*}
+                            a_0 &= \int_{-1}^{1}x dx \\
+                            &= 0
+                        \end{align*}
+                        
+                        \begin{align*}
+                            a_n &= \int_{-1}^{1} x\cos(n\pi x) dx \\
+                            &= 0
+                        \end{align*}
+                        afinal o integrando é uma função ímpar.
+
+                        \begin{align*}
+                            b_n &= \int_{-1}^{1} x \sin(n\pi x) dx \\
+                            &= \dfrac{2 \sin(\pi n) - 2 \pi n \cos(\pi n)}{\pi^2n^2}
+                        \end{align*}
+
+                        \begin{align*}
+                            c(x) &= \dfrac{2}{\pi^2} \sum_{n=1}^{\infty} \dfrac{\sin(\pi n) - \pi n \cos(\pi n)}{n^2} \sin(n\pi x)
+                        \end{align*}
+                \end{enumerate}
+        \end{enumerate}
+
+    \newpage
+
+    \appendix
+
+\end{document}
