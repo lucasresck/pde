@@ -189,8 +189,39 @@
                 Resumindo: obtemos $\lambda_i$, $c_i(0)$, $c_i(t)$ e, finalmente, $w(t)$.
         \end{enumerate}
 
+    \section*{Exercícios computacionais}
+
+        \begin{enumerate}
+            \item O programa para o Afinador de Fourier
+                foi escrito em \textit{Matlab} e pode ser conferido
+                no Apêndice \ref{appendix:tuner}.
+
+                O programa toma como entrada o diretório do arquivo,
+                lê o arquivo, calcula a transformada de Fourier do vetor, extrai
+                a frequência com maior amplitude e calcula a frequência real
+                com maior amplitude.
+
+                Para o áudio \textit{CordaViolao2.wav}, o programa detectou
+                predominância da frequência 331 Hz, que representa uma nota E,
+                provavelmente a corda 1 do violão.
+        \end{enumerate}
+
     \newpage
 
     \appendix
+
+        \section{Afinador de Fourier}
+            \label{appendix:tuner}
+
+            \begin{lstlisting}[language=Matlab]
+function freq = fourier_tuner(filepath)
+    [y, Fs] = audioread(filepath);
+    yhat = fft(y);
+    % This is because of symmetry of Fourier coefficients
+    max_freq = ceil(length(yhat)/2);
+    [~, cicles] = max(abs(yhat(1:max_freq)));
+    freq = cicles/(length(y)/Fs);
+end
+            \end{lstlisting}
 
 \end{document}
