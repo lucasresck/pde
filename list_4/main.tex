@@ -13,6 +13,7 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{amssymb}
 
 %Hyperlinks
 \usepackage{hyperref}
@@ -108,6 +109,84 @@
 
                         $$c(x) = \dfrac{2}{\pi^2} \sum_{n=1}^{\infty} \dfrac{\sin(\pi n) - \pi n \cos(\pi n)}{n^2} \sin(n\pi x)$$
                 \end{enumerate}
+
+            \item Veremos que a equação de diferenças parcial pode ser formulada
+                como uma equação diferencial matricial. Vamos resolvê-la e verificar 
+                que a base de Fourier nos ajuda a encontrar os coeficientes da solução
+                da equação diferencial matricial.
+
+                Temos um polígono com $n$ lados e $n$ vértices
+                Sejam os vértices $x_1, \cdots, x_n$.
+                Veja que a matriz de adjacência é dada:
+
+                $$A = \begin{bmatrix}
+                    0 & 1 & 0 & 0 & \cdots & 0 & 1 \\
+                    1 & 0 & 1 & 0 &\cdots & 0 & 0 \\
+                    0 & 1 & 0 & 1 &\cdots & 0 & 0 \\
+                    \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+                    1 & 0 & 0 & 0 & \cdots & 1 & 0 \\
+                \end{bmatrix}$$
+
+                Então a matriz do laplaciano $L$ é dada por
+
+                $$L = D - A = \begin{bmatrix}
+                    2 & -1 & 0 & 0 & \cdots & 0 & -1 \\
+                    -1 & 2 & -1 & 0 &\cdots & 0 & 0 \\
+                    0 & -1 & 2 & -1 &\cdots & 0 & 0 \\
+                    \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+                    -1 & 0 & 0 & 0 & \cdots & -1 & 2 \\
+                \end{bmatrix}$$
+
+                sendo $D$ a matriz diagonal com os graus de cada vértice.
+
+                Nosso polígono regular tem $n$ lados. Considere o vetor $$w(t) = (u(x_1, t), u(x_2, t), \cdots, u(x_n, t))$$
+
+                Ele descreve a temperatura em todos os vértices do polígono no tempo $t$.
+                Porém, sabemos que
+
+                $$w'(t) = -L w(t)$$
+
+                (a simples multiplicação de $-L$ por $w$ resulta na equação de diferenças parcial do enunciado,
+                porém para todos os valores de $x$ de uma vez só).
+                Sendo assim, temos uma equação diferencial matricial.
+                Observe que $L$ é uma matriz de convolução.
+                
+                Vamos considerar agora a base de Fourier $\{f_1, \cdots, f_n\}$, sendo
+
+                $$f_i = \dfrac{1}{\sqrt{n}} \left((w^i)^0, (w^i)^1, \cdots, (w^i)^{n-1}\right)$$
+
+                Nós sabemos que a base de Fourier é um conjunto ortonormal de cardinalidade $n$, então é uma base para o espaço
+                $\mathbb{C}^n$. Ora, então existem $c_1(t), \cdots, c_n(t)$ tais que
+
+                $$w(t) = \sum_{i=1}^n c_i(t)f_i$$
+
+                Segue que
+
+                $$w'(t) = \sum_{i=1}^n c_i'(t)f_i$$
+
+                Porém, também sabemos que a base de Fourier diagonaliza matrizes de convolução. Portanto:
+
+                $$\sum_{i=1}^n \dfrac{\mathrm{d}c_i}{\mathrm{d}t}(t)f_i = -L\sum_{i=1}^nc_i(t)f_i = -\sum_{i-1}^n c_i(t)\lambda_if_i$$
+
+                sendo $\lambda_i$ autovalor associado ao autovetor $f_i$.
+                O fato dos autovetores serem ortonormais nos leva a
+
+                $$\dfrac{\mathrm{d}c_i}{\mathrm{d}t}(t) = -c_i(t)\lambda_i$$
+
+                cuja solução conhecemos:
+
+                $$c_i(t) = c_i(0) e^{-\lambda_i t}$$
+
+                Para obtermos $c_i(0)$, fazemos
+
+                $$\left<u(., 0), f_i\right> = \left<w(0), f_i\right> = \left<\sum_{i=1}^n c_i(0)f_i, f_i\right> = c_i(0)$$
+
+                Para obtermos $\lambda_i$, já sabemos que basta $\lambda_i = \left<h, f_i\right>$,
+                sendo $h$ o vetor que gera a matriz de convolução. Por exemplo, no nosso caso,
+
+                $$h = (2, -1, 0, 0, \cdots, 0, -1)$$
+
+                Resumindo: obtemos $\lambda_i$, $c_i(0)$, $c_i(t)$ e, finalmente, $w(t)$.
         \end{enumerate}
 
     \newpage
