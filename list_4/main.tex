@@ -14,6 +14,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{amssymb}
+\usepackage{cases}
 
 %Hyperlinks
 \usepackage{hyperref}
@@ -187,6 +188,76 @@
                 $$h = (2, -1, 0, 0, \cdots, 0, -1)$$
 
                 Resumindo: obtemos $\lambda_i$, $c_i(0)$, $c_i(t)$ e, finalmente, $w(t)$.
+
+            \item 
+            % Temos a EDP
+            %     $$\begin{cases}
+            %         u_t + c u_x = 0 \\
+            %         u(x, 0) = f(x)
+            %     \end{cases}$$
+            %     sendo $f$ periódica com período $2\pi$
+
+            \item Vamos resolver a seguinte EDP pelo método de
+                separação de variáveis:
+
+                \begin{numcases}{f(x)=}
+                    u_{tt} = u_{xx}, & $(x, t) \in (0, L)\times\mathbb{R}_+^*$ \label{eq:1} \\
+                    u(x, 0) = \sin(5x), & $x \in (0, L)$ \label{eq:2} \\
+                    u_t(x, 0) = 0, & $x \in (0, L)$ \label{eq:3}
+                \end{numcases}
+
+                Iniciamos supondo $u(x, t) = X(x) T(t)$.
+                Observe a equação \ref{eq:2}. Dela, concluímos que
+
+                $$X(x)T(0) = \sin(5x) \Rightarrow X(x) = \dfrac{\sin(5x)}{T(0)}$$
+
+                Observe que não vale que $T(0) = 0$, pois senão $\sin(5x) = 0$ sempre.
+                Por isso vale a divisão.
+
+                Pela equação \ref{eq:1}:
+
+                \begin{align*}
+                    u_{tt} = u_{xx} &\Rightarrow X(x)T''(t) = X''(x)T(t) \\
+                    &\Rightarrow \dfrac{T''(t)}{T(t)} = \dfrac{X''(x)}{X(x)}
+                \end{align*}
+
+                Fixe $x$, varie $t$. Então $\dfrac{T''(t)}{T(t)}$ é constante.
+                Análogo para $X$. Chamemos essa constante de $\lambda$.
+                Pelo fato de que $X''(x) = \lambda X(t)$, além de que sabemos a expressão de $X(t)$,
+                temos que $\lambda = -25$.
+
+                Vamos desenvolver agora $T''(t) = \lambda T(t) = -25 T(t)$.
+                Estamos resolvendo uma EDO de 2ª ordem homogênea. Busquemos as raízes de
+
+                $$y^2+25 = 0$$
+
+                Então as raízes são $\pm 5i$, de modo que a solução geral dessa EDO é
+
+                \begin{align*}
+                    T(t) &= e^{0t} (A \cos(5t) + B\sin(5t)) \\
+                    &= A \cos(5t) + B\sin(5t)
+                \end{align*}
+
+                Vamos utilizar a equação \ref{eq:3} para nos ajudar a determinar o coeficiente $B$.
+                
+                \begin{align*}
+                    u_t(x, 0) = 0 &\Rightarrow X(x) T'(0) = 0 \\
+                    &\Rightarrow T'(0) = 0
+                \end{align*}
+
+                Ora, se não fosse isso, então $X(x) = 0$, o que não faz sentido.
+
+                \begin{align*}
+                    T'(0) = 0 &\Rightarrow -5A \sin(0) + 5B\cos(0) = 0 \\
+                    &\Rightarrow B = 0 \\
+                    &\Rightarrow T(t) = A \cos(5t)
+                \end{align*}
+
+                Concluímos, portanto, que
+
+                $$u(x, t) = X(x)T(t) = \dfrac{\sin(5x)}{A \cos(0)}A \cos(5t) = \cos(5x)\sin(5x)$$
+
+                Observe que essa função satisfaz a todas as condições iniciais.
         \end{enumerate}
 
     \section*{Exercícios computacionais}
