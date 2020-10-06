@@ -304,15 +304,15 @@
                         \end{align*}
 
                         sendo $\textrm{fft}$ a transformada discreta de Fourier,
-                        $F$ a matriz com as colunas sendo a base de Fourier.
-                        $D$ é uma matriz diagonal com os autovalores de
+                        $F$ a matriz com as colunas sendo a base de Fourier e
+                        $D$ uma matriz diagonal com os autovalores de
                         $-ctL$.
 
                         É conhecido que os autovalores de $-ctL$ são $\textrm{fft}(-cth)$,
-                        sendo $h$ a primeira linha de $L$. Então segue que:
+                        sendo $h$ a primeira linha de $L$.
 
                         Considere que $x_{0,F}$ representa $x_0$ na base de Fourier.
-                        Veja que $e^D \cdot x_{0, F}$ é fácil de ser calculado:
+                        Veja que a multiplicação $e^D \cdot x_{0, F}$ é fácil de ser calculada:
                         basta realizar a multiplicação elemento a elemento de
                         $$\exp(\lambda) = \exp((\lambda_1, \cdots, \lambda_n)) = \left(e^{\lambda_1}, \cdots, e^{\lambda_n}\right)$$
                         ou seja, o vetor com a exponencial de cada autovalor de $-ctL$, e
@@ -327,13 +327,36 @@
                             &= \textrm{ifft}\left(e^{D} \textrm{fft}(x_0)\right) \\
                         \end{align*}
 
-                        Foi implementada uma função em \textit{Matlab} que faz isso e
-                        também constrói o gráfico.
+                        Foram implementadas funções em \textit{Matlab} que fazem esse cálculo e
+                        constroem o gráfico. O código pode ser conferido no Apêndice \ref{appendix:octopus}.
+                        Nas Figuras \ref{fig:t_1000}, \ref{fig:t_10000} e
+                        \ref{fig:t_100000}, podemos ver a suavização dos pontos para diferentes valores de $t$.
+
+                        \begin{figure}[!h]
+                            \centering
+                            \includegraphics[width=0.8\textwidth]{t_1000.png}
+                            \caption{Pontos $(x_i, y_i)$ suavizados para $c = 1$, $t = 1000$.}
+                            \label{fig:t_1000}
+                        \end{figure}
+
+                        \begin{figure}[!h]
+                            \centering
+                            \includegraphics[width=0.8\textwidth]{t_10000.png}
+                            \caption{Pontos $(x_i, y_i)$ suavizados para $c = 1$, $t = 10000$.}
+                            \label{fig:t_10000}
+                        \end{figure}
+
+                        \begin{figure}[!h]
+                            \centering
+                            \includegraphics[width=0.8\textwidth]{t_100000.png}
+                            \caption{Pontos $(x_i, y_i)$ suavizados para $c = 1$, $t = 100000$.}
+                            \label{fig:t_100000}
+                        \end{figure}
 
                 \end{enumerate}
         \end{enumerate}
 
-    \newpage
+    \clearpage
 
     \appendix
 
@@ -348,6 +371,32 @@ function freq = fourier_tuner(filepath)
     max_freq = ceil(length(yhat)/2);
     [~, cicles] = max(abs(yhat(1:max_freq)));
     freq = cicles/(length(y)/Fs);
+end
+            \end{lstlisting}
+
+        \section{Suavização do polvo}
+            \label{appendix:octopus}
+
+            \begin{lstlisting}[language=Matlab]
+function smooth(M, t, c, h)
+    M = csvread("Polvo.csv");
+    x0 = M(:, 1);
+    y0 = M(:, 2);
+    x = u_t(x0, h, c, t);
+    y = u_t(y0, h, c, t);
+    scatter(x, y, 8, "filled");
+    hold on
+    xlabel("x");
+    ylabel("y");
+    title("Polvo suavizado t = " + string(t) + ", c = " + string(c));
+    hold off
+end
+function u = u_t(u0, h, c, t)
+    lambda = fft(-c*t*h);
+    exp_lambda = exp(lambda);
+    u1 = fft(u0);
+    u2 = exp_lambda.*u1;
+    u = ifft(u2);
 end
             \end{lstlisting}
 
