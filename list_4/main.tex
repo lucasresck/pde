@@ -275,6 +275,62 @@
                 Para o áudio \textit{CordaViolao2.wav}, o programa detectou
                 predominância da frequência 331 Hz, que representa uma nota E,
                 provavelmente a corda 1 do violão.
+
+            \item \begin{enumerate}
+                    \item O gráfico dos pontos $(x_i, y_i)$ pode ser observado na Figura \ref{fig:octopus}.
+                    
+                        \begin{figure}[!h]
+                            \centering
+                            \includegraphics[width=\textwidth]{octopus.png}
+                            \caption{Pontos $(x_i, y_i)$.}
+                            \label{fig:octopus}
+                        \end{figure}
+
+                    \item Seja $x_0 = (x_1, \cdots, x_n)$.
+                        Usando da analogia de que esse vetor representa as temperaturas iniciais
+                        nos vértices de um grafo circular com $n$ vértices,
+                        vamos utilizar a equação do calor para calcular as temperaturas
+                        para diferentes instantes de tempo, na esperança que as diferenças
+                        de temperatura sejam suavizadas, ou seja, o gráfico dos pontos seja suavizado.
+
+                        Vamos utilizar a solução para a equação do calor,
+                        $x(t) = e^{-c t L} x_0$, para calcular as temperaturas
+                        e suavizar o gráfico. Segue:
+
+                        \begin{align*}
+                            x(t) &= e^{-c t L} x_0 \\
+                            &= F e^{D} F^{-1} x_0 \\
+                            &= F e^{D} \textrm{fft}(x_0) \\
+                        \end{align*}
+
+                        sendo $\textrm{fft}$ a transformada discreta de Fourier,
+                        $F$ a matriz com as colunas sendo a base de Fourier.
+                        $D$ é uma matriz diagonal com os autovalores de
+                        $-ctL$.
+
+                        É conhecido que os autovalores de $-ctL$ são $\textrm{fft}(-cth)$,
+                        sendo $h$ a primeira linha de $L$. Então segue que:
+
+                        Considere que $x_{0,F}$ representa $x_0$ na base de Fourier.
+                        Veja que $e^D \cdot x_{0, F}$ é fácil de ser calculado:
+                        basta realizar a multiplicação elemento a elemento de
+                        $$\exp(\lambda) = \exp((\lambda_1, \cdots, \lambda_n)) = \left(e^{\lambda_1}, \cdots, e^{\lambda_n}\right)$$
+                        ou seja, o vetor com a exponencial de cada autovalor de $-ctL$, e
+                        $$x_{0, F}$$
+                        nosso vetor $x_0$ na base de Fourier. É o que será feito.
+
+                        Sendo assim, ao final, basta aplicar $\textrm{ifft}$ para voltarmos
+                        à base canônica:
+
+                        \begin{align*}
+                            x(t) &= F e^{D} \textrm{fft}(x_0) \\
+                            &= \textrm{ifft}\left(e^{D} \textrm{fft}(x_0)\right) \\
+                        \end{align*}
+
+                        Foi implementada uma função em \textit{Matlab} que faz isso e
+                        também constrói o gráfico.
+
+                \end{enumerate}
         \end{enumerate}
 
     \newpage
