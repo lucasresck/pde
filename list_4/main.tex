@@ -190,17 +190,66 @@
                 Resumindo: obtemos $\lambda_i$, $c_i(0)$, $c_i(t)$ e, finalmente, $w(t)$.
 
             \item 
-            % Temos a EDP
-            %     $$\begin{cases}
-            %         u_t + c u_x = 0 \\
-            %         u(x, 0) = f(x)
-            %     \end{cases}$$
-            %     sendo $f$ periódica com período $2\pi$
+                Vamos resolver a seguinte EDP utilizando a transformada de Fourier:
+                
+                \begin{numcases}{}
+                    u_t + c u_x = 0, & $(x, t) \in \mathbb{R}\times\mathbb{R}_+^*$ \label{eq:3_edp} \\
+                    u(x, 0) = f(x), & $x \in \mathbb{R}$ \label{eq:3_initial}
+                \end{numcases}
+                $f$ periódica com período $2\pi$.
+
+                A partir da Equação \ref{eq:3_edp}, podemos aplicar a transformada de Fourier,
+                considerando algumas propriedades. A derivada parcial em relação a $t$ não importa,
+                então podemos transformar dentro dessa derivada. Além disso, a transformação da derivada
+                parcial de $u$ em relação a $x$ é igual a $ik\cdot \hat{u}$. Sendo assim:
+
+                \begin{align*}
+                    \dfrac{\partial}{\partial t}u(x, t) = -c \dfrac{\partial}{\partial x} u(x, t) \\
+                    \dfrac{\partial}{\partial t}\hat{u}(k, t) = -cik \cdot \hat{u}(k, t) \\
+                \end{align*}
+
+                Temos agora uma EDO (em $t$) cuja solução é conhecida:
+
+                $$\hat{u}(k, t) = \hat{u}(k, 0) e^{-cikt}$$
+
+                Como $u(x, 0) = f(x)$, vale que $\hat{u}(k, 0) = \hat{f}(k)$. Então:
+
+                $$\hat{u}(k, t) = \hat{f}(k) e^{-cikt}$$
+
+                Vamos montar agora a série de Fourier de $u$:
+
+                \begin{align*}
+                    u(x, t) &= \sum_{k=-\infty}^{\infty} \hat{u}(k, t) e^{ikx} \\
+                    &= \sum_{k=-\infty}^{\infty} \hat{f}(k) e^{-cikt} e^{ikx} \\
+                    &= \sum_{k=-\infty}^{\infty} \hat{f}(k) e^{ik(x-tc)} \\
+                \end{align*}
+
+                Apenas por organização, vamos criar uma função $g$ tal que $g(y, t) = u(y+tc, t)$.
+                Então:
+
+                \begin{align*}
+                    g(y, t) &= u(y+tc, t) \\
+                    &= \sum_{k=-\infty}^{\infty} \hat{f}(k) e^{iky} \\
+                    &= f(y)
+                \end{align*}
+
+                afinal $f$ é periódica com periódo $2\pi$.
+
+                Concluímos que $u(y+tc, t) = f(y)$, ou melhor,
+
+                $$u(x, t) = f(x-tc)$$
+
+                Veja que essa função satisfaz as condições iniciais:
+
+                \begin{itemize}
+                    \item $u_t(x, t) + c u_x(x, t) = f'(x-tc)(-c) + cf'(x-tc) = 0$
+                    \item $u(x, 0) = f(x)$
+                \end{itemize}
 
             \item Vamos resolver a seguinte EDP pelo método de
                 separação de variáveis:
 
-                \begin{numcases}{f(x)=}
+                \begin{numcases}{}
                     u_{tt} = u_{xx}, & $(x, t) \in (0, L)\times\mathbb{R}_+^*$ \label{eq:1} \\
                     u(x, 0) = \sin(5x), & $x \in (0, L)$ \label{eq:2} \\
                     u_t(x, 0) = 0, & $x \in (0, L)$ \label{eq:3}
@@ -255,7 +304,7 @@
 
                 Concluímos, portanto, que
 
-                $$u(x, t) = X(x)T(t) = \dfrac{\sin(5x)}{A \cos(0)}A \cos(5t) = \cos(5x)\sin(5x)$$
+                $$u(x, t) = X(x)T(t) = \dfrac{\sin(5x)}{A \cos(0)}A \cos(5t) = \cos(5t)\sin(5x)$$
 
                 Observe que essa função satisfaz a todas as condições iniciais.
         \end{enumerate}
