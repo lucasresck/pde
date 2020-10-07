@@ -118,7 +118,7 @@
 
                 Temos um polígono com $n$ lados e $n$ vértices
                 Sejam os vértices $x_1, \cdots, x_n$.
-                Veja que a matriz de adjacência é dada:
+                Veja que a matriz de adjacência é dada por:
 
                 $$A = \begin{bmatrix}
                     0 & 1 & 0 & 0 & \cdots & 0 & 1 \\
@@ -143,11 +143,11 @@
                 Nosso polígono regular tem $n$ lados. Considere o vetor $$w(t) = (u(x_1, t), u(x_2, t), \cdots, u(x_n, t))$$
 
                 Ele descreve a temperatura em todos os vértices do polígono no tempo $t$.
-                Porém, sabemos que
+                Porém, sabemos, pelo enunciado, que
 
                 $$w'(t) = -L w(t)$$
 
-                (a simples multiplicação de $-L$ por $w$ resulta na equação de diferenças parcial do enunciado,
+                (a simples multiplicação de $-L$ por $w(t)$ resulta na equação de diferenças parcial do enunciado,
                 porém para todos os valores de $x$ de uma vez só).
                 Sendo assim, temos uma equação diferencial matricial.
                 Observe que $L$ é uma matriz de convolução.
@@ -157,7 +157,7 @@
                 $$f_i = \dfrac{1}{\sqrt{n}} \left((w^i)^0, (w^i)^1, \cdots, (w^i)^{n-1}\right)$$
 
                 Nós sabemos que a base de Fourier é um conjunto ortonormal de cardinalidade $n$, então é uma base para o espaço
-                $\mathbb{C}^n$. Ora, então existem $c_1(t), \cdots, c_n(t)$ tais que
+                $\mathbb{C}^n$. Ora, como $w(t) \in \mathbb{C}^n$ então existem $c_1(t), \cdots, c_n(t)$ tais que
 
                 $$w(t) = \sum_{i=1}^n c_i(t)f_i$$
 
@@ -167,10 +167,16 @@
 
                 Porém, também sabemos que a base de Fourier diagonaliza matrizes de convolução. Portanto:
 
-                $$\sum_{i=1}^n \dfrac{\mathrm{d}c_i}{\mathrm{d}t}(t)f_i = -L\sum_{i=1}^nc_i(t)f_i = -\sum_{i-1}^n c_i(t)\lambda_if_i$$
+                $$w'(t) = -L w(t)$$
+                \begin{align*}
+                    \sum_{i=1}^n \dfrac{\mathrm{d}c_i}{\mathrm{d}t}(t)f_i &= -L\sum_{i=1}^nc_i(t)f_i \\
+                    &= -\sum_{i=1}^nc_i(t)Lf_i \\
+                    &= -\sum_{i-1}^n c_i(t)\lambda_if_i
+                \end{align*}
 
                 sendo $\lambda_i$ autovalor associado ao autovetor $f_i$.
-                O fato dos autovetores serem ortonormais nos leva a
+                Se aplicamos um produto interno com $f_i$ nos dois membros da equação,
+                o fato dos autovetores $f_i$ serem ortonormais nos leva a
 
                 $$\dfrac{\mathrm{d}c_i}{\mathrm{d}t}(t) = -c_i(t)\lambda_i$$
 
@@ -251,19 +257,19 @@
 
                 \begin{numcases}{}
                     u_{tt} = u_{xx}, & $(x, t) \in (0, L)\times\mathbb{R}_+^*$ \label{eq:1} \\
-                    u(x, 0) = \sin(5x), & $x \in (0, L)$ \label{eq:2} \\
+                    u(x, 0) = \sin(5x), & $x \in [0, L]$ \label{eq:2} \\
                     u_t(x, 0) = 0, & $x \in (0, L)$ \label{eq:3}
                 \end{numcases}
 
                 Iniciamos supondo $u(x, t) = X(x) T(t)$.
-                Observe a equação \ref{eq:2}. Dela, concluímos que
+                Observe a Equação \ref{eq:2}. Dela, concluímos que
 
                 $$X(x)T(0) = \sin(5x) \Rightarrow X(x) = \dfrac{\sin(5x)}{T(0)}$$
 
                 Observe que não vale que $T(0) = 0$, pois senão $\sin(5x) = 0$ sempre.
                 Por isso vale a divisão.
 
-                Pela equação \ref{eq:1}:
+                Pela Equação \ref{eq:1}:
 
                 \begin{align*}
                     u_{tt} = u_{xx} &\Rightarrow X(x)T''(t) = X''(x)T(t) \\
@@ -272,8 +278,9 @@
 
                 Fixe $x$, varie $t$. Então $\dfrac{T''(t)}{T(t)}$ é constante.
                 Análogo para $X$. Chamemos essa constante de $\lambda$.
-                Pelo fato de que $X''(x) = \lambda X(t)$, além de que sabemos a expressão de $X(t)$,
-                temos que $\lambda = -25$.
+                Logo, vemos que $X''(x) = \lambda X(x)$. Além disso, sabemos a expressão de $X(x)$,
+                que é $X(x) = \dfrac{\sin(5x)}{T(0)}$.
+                Então concluímos que $\lambda = -25$.
 
                 Vamos desenvolver agora $T''(t) = \lambda T(t) = -25 T(t)$.
                 Estamos resolvendo uma EDO de 2ª ordem homogênea. Busquemos as raízes de
@@ -287,14 +294,14 @@
                     &= A \cos(5t) + B\sin(5t)
                 \end{align*}
 
-                Vamos utilizar a equação \ref{eq:3} para nos ajudar a determinar o coeficiente $B$.
+                Vamos utilizar a Equação \ref{eq:3} para nos ajudar a determinar o coeficiente $B$.
                 
                 \begin{align*}
                     u_t(x, 0) = 0 &\Rightarrow X(x) T'(0) = 0 \\
                     &\Rightarrow T'(0) = 0
                 \end{align*}
 
-                Ora, se não fosse isso, então $X(x) = 0$, o que não faz sentido.
+                Ora, se não fosse isso, então $X(x) = 0$, o que não faz sentido para nós.
 
                 \begin{align*}
                     T'(0) = 0 &\Rightarrow -5A \sin(0) + 5B\cos(0) = 0 \\
@@ -355,10 +362,11 @@
                         sendo $\textrm{fft}$ a transformada discreta de Fourier,
                         $F$ a matriz com as colunas sendo a base de Fourier e
                         $D$ uma matriz diagonal com os autovalores de
-                        $-ctL$.
+                        $-ctL$. Isso é válido pois sabemos que $F$ diagonaliza a matriz
+                        de convolução $L$.
 
                         É conhecido que os autovalores de $-ctL$ são $\textrm{fft}(-cth)$,
-                        sendo $h$ a primeira linha de $L$.
+                        sendo $h$ a primeira linha de $L$. 
 
                         Considere que $x_{0,F}$ representa $x_0$ na base de Fourier.
                         Veja que a multiplicação $e^D \cdot x_{0, F}$ é fácil de ser calculada:
@@ -376,8 +384,9 @@
                             &= \textrm{ifft}\left(e^{D} \textrm{fft}(x_0)\right) \\
                         \end{align*}
 
-                        Foram implementadas funções em \textit{Matlab} que fazem esse cálculo e
-                        constroem o gráfico. O código pode ser conferido no Apêndice \ref{appendix:octopus}.
+                        Foram implementadas funções em \textit{Matlab} que fazem esse cálculo,
+                        tanto para $x$ quanto para $y$, e
+                        constroem o gráfico para diferentes valores de $t$. O código pode ser conferido no Apêndice \ref{appendix:octopus}.
                         Nas Figuras \ref{fig:t_1000}, \ref{fig:t_10000} e
                         \ref{fig:t_100000}, podemos ver a suavização dos pontos para diferentes valores de $t$.
 
@@ -428,7 +437,6 @@ end
 
             \begin{lstlisting}[language=Matlab]
 function smooth(M, t, c, h)
-    M = csvread("Polvo.csv");
     x0 = M(:, 1);
     y0 = M(:, 2);
     x = u_t(x0, h, c, t);
