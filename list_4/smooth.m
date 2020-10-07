@@ -1,5 +1,4 @@
 function smooth(M, t, c, h)
-    M = csvread("Polvo.csv");
     x0 = M(:, 1);
     y0 = M(:, 2);
     x = u_t(x0, h, c, t);
